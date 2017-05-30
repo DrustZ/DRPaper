@@ -9,3 +9,4 @@ Extract references of a scholarly article PDF, and try to search and download th
 - [ ] Neat display in command-line style
 - [ ] GUI provide
 - [ ] Hand Labeling and auto-training for missed references
+- [ ] Chinese paper support
