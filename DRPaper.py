@@ -1,4 +1,4 @@
-# coding:utf-8
+# -*- coding: utf-8 -*-
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter,XMLConverter
 from pdfminer.layout import LAParams
@@ -8,7 +8,10 @@ from cStringIO import StringIO
 from reftrainer import sent2features
 import pycrfsuite
 import lxml.html
-import re
+import unicodedata, re
+
+def remove_control_characters(s):
+    return ''.join([i if ord(i) < 128 else ' ' for i in s])
 
 class DRReference():
     def __init__(self, authors, title, journal=None):
@@ -25,7 +28,11 @@ class DRPaper():
 
     def extract(self, filepath):
         text = self.conver_pdf_to_txt(filepath)
+        # print 'text converted'
+        text = remove_control_characters(text)
+        # print 'text cleaned'
         refrange = self.find_references_range(text)
+        # print 'range finded'
         return self.extract_references(refrange)
 
     def conver_pdf_to_txt(self, filepath):
@@ -74,7 +81,6 @@ class DRPaper():
             return refs
 
     def extract_references(self, refs):
-
         # find one complete reference (may be cover multiple lines)
         def wrap_one_ref(lines, idxtype):
             start, to = 0, 1
@@ -116,7 +122,7 @@ class DRPaper():
         references = []
         while base < len(refs):
             start, end = wrap_one_ref(refs[base:], idxtype)
-            # print 'start new session\n', refs[start+base:end+base]
+            print 'start new session\n', refs[start+base:end+base]
             words = ' '.join(refs[base+start:base+end])
             words = [[i] for i in words.split()]
             tags = self.tagger.tag(sent2features(words))
@@ -129,7 +135,7 @@ class DRPaper():
                 elif title:
                     references.append(title)
                     break
-            # print title, '\n'
+            print title, '\n'
             base += end
             cnt += 1.0
         # print 'find/actual:', (cnt/len(references))
