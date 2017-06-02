@@ -4,7 +4,7 @@ Extract references of a scholarly article PDF, and try to search and download th
 ### To-do:
 - [x] Scan PDF and extract the references
 - [ ] Improve extractor's quality
-- [ ] Locate the references in the content
+- [x] Locate the references in the content
 - [ ] Search and download references
 - [ ] Neat display in command-line style
 - [ ] GUI provide
