@@ -6,6 +6,8 @@ def preprocess(filename):
     with open(filename) as f:
         lines = f.readlines()
         for line in lines:
+            if not line:
+                continue
             tree = html.fromstring(line)
             sents = []
             for ele in tree:
@@ -19,6 +21,7 @@ def word2features(sent, i):
     word = sent[i][0]
     features = [
         'bias',
+        'word.len=%d' % len(word),
         'word.lower=' + word.lower(),
         'word[-3:]=' + word[-3:],
         'word[-2:]=' + word[-2:],
@@ -33,6 +36,7 @@ def word2features(sent, i):
             word1 = sent[i-n][0]
             features.extend([
                 '-%d:word=%s' % (n, word1),
+                '-%d:word.len=%d' % (n,len(word1)),
                 '-%d:word.lower=%s' % (n, word1.lower()),
                 '-%d:word.istitle=%s' % (n, word1.istitle()),
                 '-%d:word.isupper=%s' % (n, word1.isupper()),
@@ -45,6 +49,7 @@ def word2features(sent, i):
             word1 = sent[i+n][0]
             features.extend([
                 '+%d:word=%s' % (n, word1),
+                '+%d:word.len=%d' % (n, len(word1)),
                 '+%d:word.lower=%s' % (n, word1.lower()),
                 '+%d:word.istitle=%s' % (n, word1.istitle()),
                 '+%d:word.isupper=%s' % (n, word1.isupper()),
