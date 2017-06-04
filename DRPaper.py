@@ -85,7 +85,7 @@ class DRPaper():
             if any(x in line for x in keywords):
             #then we check if and only if the characters are 'reference(s)'
                 pureline = " ".join(re.findall("[a-zA-Z]+",line))
-                if any(x in pureline for x in keywords):
+                if any(x == pureline for x in keywords):
                     break
 
         if idx == 0:
@@ -166,6 +166,7 @@ class DRPaper():
                     drref.arxiv += words[i][0]
                 if tag == 'idx' and self.idxtype > 0:
                     ref_idx = int(''.join(x for x in words[i][0] if x.isdigit()))
+            drref.title = drref.title.replace('-','').split('.')[0]
             if ref_idx > 0:
                 self.refdict[ref_idx] = drref
             else:
