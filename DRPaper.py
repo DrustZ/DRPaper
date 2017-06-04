@@ -206,8 +206,6 @@ class DRPaper():
             result += ' '.join(self.content[pos[1]:pos[1]+100].split()[:10]) + '...\n'
         return result
 
-    def printrefs(self):
-        for k,v in self.refdict.items():
-            print k
-            print self.find_ref_in_text(k)
-        
+    def getref_context(self, refid):
+        if refid < self.refdict.keys()[-1]:
+            return self.find_ref_in_text(refid)
